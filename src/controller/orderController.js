@@ -1,62 +1,48 @@
-//orderController.js
+// orderController.js
 
 import orderService from "../service/orderService.js";
 import jwtUtils from "../util/jwtUtils.js";
 
-/** Admin controller*/
-//GET /order - Lista på alla pågående ordrar 
-const getAllOrders = async (req, resp) => {
-
+// GET /orders - Lista på alla pågående ordrar
+const getAllOrders = async (req, res) => {
   const orders = await orderService.getAll();
-
-  if(orders.length == 0) {
-    return resp.status(204).send({msg: "Order is empty"});
-  }
-
-  resp.send(await orderService.getAll());
+  res.send(orders);
 };
 
-/** Customer controller*/
-//GET /order/:id - Hämta en specifik order 
-const getOrderById = async (req, resp) => {
-  const { username } = resp.locals.token;
-  
-  resp.send(await orderService.get(username));
-}
+// GET /orders/:id - Hämta en specifik order
+const getOrderById = async (req, res) => {
+  const order = await orderService.getById(req.params.id);
+  res.send(order);
+};
 
-//POST /order - Skapa en ny order
-const createOrder = (req, resp) => {
-  const {name, quantity} = req.body;
-  const { username } = resp.locals.token;
+// POST /orders - Skapa en ny order
+const createOrder = async (req, res) => {
+  const { date, time, phone, email, items, status } = req.body;
+  const { username } = res.locals.token;
+  const newOrder = await orderService.createOrder(username, date, time, phone, email, items, status);
+  res.status(201).send(newOrder);
+};
 
-  if(name == undefined || quantity == undefined) {
-    return resp.status(400).send({err: "Missing parameters name or quantity"});
-  } else if(!req.params.id.match("[0-9]*")) {
-    return resp.status(400).send({err: "Id number is malformed"}); // TODO: change this to middlware
-  }
+// PATCH /orders/:id - Uppdatera en order med :id
+const updateOrder = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const updatedOrder = await orderService.update(id, status);
+  res.send(updatedOrder);
+};
 
-  orderService.add(username, {name, quantity});
+// DELETE /orders/:id - Ta bort en pågående order
+const deleteOrder = async (req, res) => {
+  const { id } = req.params;
+  await orderService.deleteOrder(id);
+  res.status(200).send({ msg: "Order deleted successfully" });
+};
 
-  resp.status(201).send({msg: "Item was added"});
-}
+// PATCH /orders/:id/delivered - Uppdatera en order som levererad
+const updateOrderAsDelivered = async (req, res) => {
+  const { id } = req.params;
+  const updatedOrder = await orderService.updateDeliveryStatus(id);
+  res.send(updatedOrder);
+};
 
-//DELETE /order/:id/item/:itemId - Ta bort en pågående order
-const deleteItem = async (req, resp) => {
-  await orderService.deleteItem(req.params.id, req.params.itemId);
-
-  resp.status(200).send({msg: "success"});
-}
-
-//PATCH /order/:id - Uppdatera en order med :id, ex. ny leveranstid,
-const updateOrder = (req, resp) => {
-  resp.send("Not implemented yet");
-}
-
-
-/** Provider Controller*/
-//PATCH /order/:id - Uppdatera en order som levererad
-const updateOrderAsDelivered = (req, resp) => {
-    resp.send("Not implemented yet");
-  }
-
-export default { getAllOrders, getOrderById, createOrder, deleteItem, updateOrder, updateOrderAsDelivered }
+export default { getAllOrders, getOrderById, createOrder, updateOrder, deleteOrder, updateOrderAsDelivered };

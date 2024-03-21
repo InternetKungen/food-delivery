@@ -1,38 +1,43 @@
-//orderService.js
+// orderService.js
 
 import { fetchCollection } from "../mongodb/mongoDbClient.js";
+import { ObjectId } from "mongodb";
 
 const ORDER_COLLECTION_NAME = "orders";
 
-const orders = []
+// Lägg till fler fält om det behövs (som tid, datum, telefonnummer, e-post etc.)
+const createOrder = async (username, date, time, phone, email, items, status) => {
+  const order = { username, date, time, phone, email, items, status };
+  const result = await fetchCollection(ORDER_COLLECTION_NAME).insertOne(order);
+  return result;
+};
 
 const getAll = async () => {
-  return await fetchCollection(ORDER_COLLECTION_NAME).find({}, {_id: 0}).toArray(); // TODO: Projection _id: 0 does not work to prevent _id from showing
-}
+  return await fetchCollection(ORDER_COLLECTION_NAME).find({}).toArray();
+};
 
-const get = async username => {
-  return await fetchCollection(ORDER_COLLECTION_NAME).findOne({username});
-}
+const getById = async (id) => {
+    const _id = new ObjectId(id);
+    return await fetchCollection(ORDER_COLLECTION_NAME).findOne({ _id });
+  };
 
-const deleteOrder = (username) => {
-  fetchCollection(ORDER_COLLECTION_NAME).deleteOne({username});
-}
+const update = async (id, status) => {
+    const _id = new ObjectId(id);
+    await fetchCollection(ORDER_COLLECTION_NAME).updateOne({ _id }, { $set: { status } });
+    return { _id, status };
+  };
 
-const deleteItem = async (username, itemId) => {
-  const order = await get(username);
+const deleteOrder = async (id) => {
+    const _id = new ObjectId(id);
+    await fetchCollection(ORDER_COLLECTION_NAME).deleteOne({ _id });
 
-  order.items.splice(itemId, 1);
+};
 
-  const result = await fetchCollection(ORDER_COLLECTION_NAME).updateOne({username}, { $set: {items: order.items}});
-}
+const updateDeliveryStatus = async (id) => {
+    const _id = new ObjectId(id);
+    const status = "delivered";
+    await fetchCollection(ORDER_COLLECTION_NAME).updateOne({ _id }, { $set: { status } });
+    return { _id: id, status };
+};
 
-const add = async (username, {name, quantity}) => {
-  const items = {name, quantity};
-
-  const result = await fetchCollection(ORDER_COLLECTION_NAME).updateOne({username}, { $push: { items }}, { upsert: true });
-
-  return result.upsertedCount == 1 || result.modifiedCount == 1;
-}
-
-
-export default { getAll, get, add, deleteOrder, deleteItem }
+export default { createOrder, getAll, getById, update, deleteOrder, updateDeliveryStatus };

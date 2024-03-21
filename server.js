@@ -26,7 +26,6 @@ app.use('/', orderRouter);
 // Använd authRouter för att hantera auth-relaterade endpoints
 app.use('/', authRouter);
 
-
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
