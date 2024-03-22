@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration</title>
+    <script src="./src/js/addProduct.js" defer></script>
+    <script src="src/util/requests.js"></script>
+    <script src="src/service/authService.js"></script>
+  </head>
+  <body>
+    <form class="registration-form">
+      <div>
+        <p for="name-field">Product name:</p>
+        <input type="text" name="name-field" />
+      </div>
+      <div>
+        <p for="price-field">Set price:</p>
+        <input type="text" name="price-field" />
+      </div>
+
+      <div>
+        <p for="type-field">Type of product:</p>
+        <select type="text" name="type-field">
+          <option value="beverage">Beverage</option>
+          <option value="food">Food</option>
+        </select>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
