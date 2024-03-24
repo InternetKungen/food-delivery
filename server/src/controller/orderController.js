@@ -9,6 +9,13 @@ const getAllOrders = async (req, res) => {
   res.send(orders);
 };
 
+// GET /orders/user - Lista på alla pågående ordrar för en specifik användare
+const getAllOrdersByUser = async (req, res) => {
+  const { username } = res.locals.token;
+  const orders = await orderService.getAllByUser(username);
+  res.send(orders);
+};
+
 // GET /orders/:id - Hämta en specifik order
 const getOrderById = async (req, res) => {
   const order = await orderService.getById(req.params.id);
@@ -45,4 +52,4 @@ const updateOrderAsDelivered = async (req, res) => {
   res.send(updatedOrder);
 };
 
-export default { getAllOrders, getOrderById, createOrder, updateOrder, deleteOrder, updateOrderAsDelivered };
+export default { getAllOrders, getAllOrdersByUser, getOrderById, createOrder, updateOrder, deleteOrder, updateOrderAsDelivered };

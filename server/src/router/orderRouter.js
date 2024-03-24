@@ -9,6 +9,9 @@ const router = express.Router();
 // GET /orders - Lista på alla pågående ordrar
 router.get("/orders", jwtFilter.authorize.bind({ role: "CUSTOMER" }), orderController.getAllOrders);
 
+// GET /orders/user - Lista på alla pågående ordrar för en specifik användare
+router.get("/orders/user", jwtFilter.authorize.bind({ role: "CUSTOMER" }), orderController.getAllOrdersByUser);
+
 // GET /orders/:id - Hämta en specifik order
 router.get("/orders/:id", jwtFilter.authorize.bind({ role: "CUSTOMER" }), orderController.getOrderById);
 

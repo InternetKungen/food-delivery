@@ -16,6 +16,11 @@ const getAll = async () => {
   return await fetchCollection(ORDER_COLLECTION_NAME).find({}).toArray();
 };
 
+// GET /orders - Lista på alla pågående ordrar för en specifik användare
+const getAllByUser = async (username) => {
+  return await fetchCollection(ORDER_COLLECTION_NAME).find({ username }).toArray();
+};
+
 const getById = async (id) => {
     const _id = new ObjectId(id);
     return await fetchCollection(ORDER_COLLECTION_NAME).findOne({ _id });
@@ -40,4 +45,4 @@ const updateDeliveryStatus = async (id) => {
     return { _id: id, status };
 };
 
-export default { createOrder, getAll, getById, update, deleteOrder, updateDeliveryStatus };
+export default { createOrder, getAll, getAllByUser, getById, update, deleteOrder, updateDeliveryStatus };

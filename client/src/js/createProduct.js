@@ -2,13 +2,13 @@ const nameField = document.querySelector('input[name=name-field]');
 const priceField = document.querySelector('input[name=price-field]');
 const typeField = document.querySelector('select[name=type-field]');
 const imageField = document.querySelector('input[name=image-field]');
-const addProductForm = document.querySelector('.add-product-form');
+const createProductForm = document.querySelector('.create-product-form');
 
-addProductForm?.addEventListener('submit', async e => {
+createProductForm?.addEventListener('submit', async e => {
   e.preventDefault();
 
-  const name = usernameField.value;
-  const price = passwordField.value;
+  const name = nameField.value;
+  const price = priceField.value;
   const type = typeField.value;
   const image = imageField.value;
 
@@ -16,6 +16,6 @@ addProductForm?.addEventListener('submit', async e => {
   console.log(data);
 
   const resp = await createProduct(data);
-
-    window.location.href = "index.html";
+    console.log(resp);
+    window.location.href = "products.html";
 });

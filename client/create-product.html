@@ -3,20 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registration</title>
-    <script src="./src/js/addProduct.js" defer></script>
+    <title>Create product</title>
+    <script src="./src/js/createProduct.js" defer></script>
     <script src="src/util/requests.js"></script>
-    <script src="src/service/authService.js"></script>
+    <script src="src/service/productService.js"></script>
   </head>
   <body>
-    <form class="registration-form">
+    <h1>Skapa produkt</h1>
+    <form class="create-product-form">
       <div>
         <p for="name-field">Product name:</p>
         <input type="text" name="name-field" />
       </div>
+
       <div>
         <p for="price-field">Set price:</p>
         <input type="text" name="price-field" />
+      </div>
+
+      <div>
+        <p for="image-field">Link to image</p>
+        <input type="text" name="image-field" />
       </div>
 
       <div>

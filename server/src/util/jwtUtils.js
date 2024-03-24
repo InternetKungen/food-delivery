@@ -9,7 +9,7 @@ function generate(claims) {
   let options = {
     issuer: "food-delivery-api",
     subject: "Auth token for food-delivery api",
-    expiresIn: "15m"
+    expiresIn: "60m"
   }
 
   return jwt.sign(claims, mySecret, options);

@@ -7,7 +7,7 @@
       for(let item of data) {
         const li = document.createElement('li');
   
-        li.textContent = `${item.name}, Pris: ${item.price}, Antal: ${item.type}`;
+        li.textContent = `${item.name}, Pris: ${item.price}, type: ${item.type}`;
         listEl.append(li);
       }
   
